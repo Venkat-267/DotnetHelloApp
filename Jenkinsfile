@@ -9,9 +9,12 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
+
+        stage('Restore and Build') {
             steps {
-                git 'https://github.com/Venkat-267/DotnetHelloApp.git' // Replace with your Git repository URL
+                script {
+                    bat 'dotnet build --configuration Release' // Build the application
+                }
             }
         }
 
