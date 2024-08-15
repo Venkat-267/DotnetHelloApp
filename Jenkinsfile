@@ -15,15 +15,6 @@ pipeline {
             }
         }
 
-        stage('Restore and Build') {
-            steps {
-                script {
-                    bat 'dotnet restore' // Restore dependencies
-                    bat 'dotnet build --configuration Release' // Build the application
-                }
-            }
-        }
-
         stage('Publish') {
             steps {
                 script {
