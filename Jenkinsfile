@@ -4,8 +4,8 @@ pipeline {
     environment {
         AWS_CREDENTIALS = credentials('aws-credentials-id') // The ID of the AWS credentials you added
         AWS_REGION = 'ap-south-1' // Your AWS region (e.g., us-west-2)
-        EB_APP_NAME = 'HelloWorldApp' // Your Elastic Beanstalk application name
-        EB_ENV_NAME = 'HelloWorldApp-env' // Your Elastic Beanstalk environment name
+        EB_APP_NAME = 'Sample' // Your Elastic Beanstalk application name
+        EB_ENV_NAME = 'Sample-env' // Your Elastic Beanstalk environment name
     }
 
     stages {
