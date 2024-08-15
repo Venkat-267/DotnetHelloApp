@@ -2,56 +2,78 @@ pipeline {
     agent any
 
     environment {
-        AWS_CREDENTIALS = credentials('aws-credentials-id') // The ID of the AWS credentials you added
-        AWS_REGION = 'ap-south-1' // Your AWS region (e.g., us-west-2)
-        EB_APP_NAME = 'Sample' // Your Elastic Beanstalk application name
-        EB_ENV_NAME = 'Sample-env' // Your Elastic Beanstalk environment name
+        AWS_REGION = 'ap-south-1' // AWS Region where Elastic Beanstalk is deployed
+        S3_BUCKET = 'nodejs-artifact-venkat ' // S3 Bucket name to upload application package
+        EB_APP_NAME = 'Sample' // Elastic Beanstalk application name
+        EB_ENV_NAME = 'Sample-env' // Elastic Beanstalk environment name
     }
 
     stages {
 
-        stage('Restore and Build') {
+        stage('Build') {
             steps {
-                script {
-                    bat 'dotnet build --configuration Release' // Build the application
-                }
+                // Build the .NET application
+                sh 'dotnet build --configuration Release'
             }
         }
 
         stage('Publish') {
             steps {
-                script {
-                    bat 'dotnet publish -c Release -o ./publish' // Publish the application
-                }
+                // Publish the application to a folder
+                sh 'dotnet publish -c Release -o ./publish'
             }
         }
 
-        stage('Package Application') {
+        stage('Package') {
             steps {
-                script {
-                    zip zipFile: 'HelloWorldApp.zip', archive: false, dir: 'publish' // Create a ZIP package
+                // Zip the published output
+                sh 'zip -r app.zip ./publish/*'
+            }
+        }
+
+        stage('Upload to S3') {
+            steps {
+                // Upload the package to S3
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-id',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh '''
+                    aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+                    aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+                    aws configure set region $AWS_REGION
+                    aws s3 cp app.zip s3://$S3_BUCKET/app.zip
+                    '''
                 }
             }
         }
 
         stage('Deploy to Elastic Beanstalk') {
             steps {
-                withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
-                    s3Upload(file: 'HelloWorldApp.zip', bucket: 'jenkins-venkat-eb', path: 'HelloWorldApp/HelloWorldApp.zip') // Upload to S3
-
-                    // Deploy to Elastic Beanstalk
-                    bat """
-                    aws elasticbeanstalk create-application-version --application-name ${EB_APP_NAME} --version-label v${BUILD_NUMBER} --source-bundle S3Bucket="jenkins-venkat-eb",S3Key="HelloWorldApp/HelloWorldApp.zip"
-                    aws elasticbeanstalk update-environment --environment-name ${EB_ENV_NAME} --version-label v${BUILD_NUMBER}
-                    """
+                // Deploy the application to Elastic Beanstalk
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-id',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh '''
+                    aws elasticbeanstalk create-application-version --application-name $EB_APP_NAME --version-label v$BUILD_NUMBER --source-bundle S3Bucket=$S3_BUCKET,S3Key=app.zip
+                    aws elasticbeanstalk update-environment --environment-name $EB_ENV_NAME --version-label v$BUILD_NUMBER
+                    '''
                 }
             }
         }
     }
 
     post {
-        always {
-            cleanWs() // Clean the workspace after the build
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed!'
         }
     }
 }
