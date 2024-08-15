@@ -1,0 +1,7 @@
+C:\Users\venkat\my-dotnet\HelloWorldApp\publish\HelloWorldApp.exe
+C:\Users\venkat\my-dotnet\HelloWorldApp\publish\appsettings.Development.json
+C:\Users\venkat\my-dotnet\HelloWorldApp\publish\appsettings.json
+C:\Users\venkat\my-dotnet\HelloWorldApp\publish\HelloWorldApp.dll
+C:\Users\venkat\my-dotnet\HelloWorldApp\publish\HelloWorldApp.deps.json
+C:\Users\venkat\my-dotnet\HelloWorldApp\publish\HelloWorldApp.runtimeconfig.json
+C:\Users\venkat\my-dotnet\HelloWorldApp\publish\HelloWorldApp.pdb
