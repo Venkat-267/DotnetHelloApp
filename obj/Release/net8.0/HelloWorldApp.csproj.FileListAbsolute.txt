@@ -28,3 +28,9 @@ C:\Users\venkat\my-dotnet\HelloWorldApp\obj\Release\net8.0\refint\HelloWorldApp.
 C:\Users\venkat\my-dotnet\HelloWorldApp\obj\Release\net8.0\HelloWorldApp.pdb
 C:\Users\venkat\my-dotnet\HelloWorldApp\obj\Release\net8.0\HelloWorldApp.genruntimeconfig.cache
 C:\Users\venkat\my-dotnet\HelloWorldApp\obj\Release\net8.0\ref\HelloWorldApp.dll
+C:\Users\venkat\my-dotnet\HelloWorldApp\bin\Release\net8.0\publish\web.config
+C:\Users\venkat\my-dotnet\HelloWorldApp\bin\Release\net8.0\publish\appsettings.Development.json
+C:\Users\venkat\my-dotnet\HelloWorldApp\bin\Release\net8.0\publish\appsettings.json
+C:\Users\venkat\my-dotnet\HelloWorldApp\bin\Release\net8.0\publish\HelloWorldApp.deps.json
+C:\Users\venkat\my-dotnet\HelloWorldApp\bin\Release\net8.0\publish\HelloWorldApp.runtimeconfig.json
+C:\Users\venkat\my-dotnet\HelloWorldApp\obj\Release\net8.0\HelloWorldApp.sourcelink.json
