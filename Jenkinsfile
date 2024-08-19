@@ -12,12 +12,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Clone the GitHub repository
-                git url: "${REPO_URL}"
-            }
-        }
 
         stage('Build') {
             steps {
