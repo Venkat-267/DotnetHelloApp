@@ -35,13 +35,26 @@ pipeline {
                         sh '''
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << EOF
                                 cd ${DEPLOY_DIR}
-                                if [ -f ${APP_NAME}.dll ]; then
-                                    dotnet ${APP_NAME}.dll --urls http://0.0.0.0:${APP_PORT}
-                                else
-                                    echo "Application DLL not found."
-                                    exit 1
-                                fi
-                            EOF
+                                sudo tee /etc/systemd/system/helloapp.service > /dev/null <<EOL
+                                [Unit]
+                                Description=Your .NET Core Application
+                                After=network.target
+                                
+                                [Service]
+                                ExecStart=/usr/bin/dotnet ${DEPLOY_DIR}/bin/Release/net8.0/publish/HelloWorldApp.dll --urls http://0.0.0.0:5000
+                                WorkingDirectory=${DEPLOY_DIR}/bin/Release/net8.0/publish
+                                Restart=always
+                                RestartSec=10
+                                SyslogIdentifier=your-application
+                                User=ubuntu
+                                Group=ubuntu
+                                Environment=ASPNETCORE_ENVIRONMENT=Production
+                                
+                                [Install]
+                                WantedBy=multi-user.target
+                                EOL
+                                sudo systemctl restart nginx
+                                EOL
                         '''
                     }
                 }
