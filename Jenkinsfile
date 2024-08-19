@@ -33,9 +33,14 @@ pipeline {
 
                         // SSH into the EC2 instance and run deployment commands
                         sh '''
-                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << 'EOF'
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << EOF
                                 cd ${DEPLOY_DIR}
-                                dotnet ${APP_NAME}.dll --urls http://0.0.0.0:${APP_PORT}
+                                if [ -f ${APP_NAME}.dll ]; then
+                                    dotnet ${APP_NAME}.dll --urls http://0.0.0.0:${APP_PORT}
+                                else
+                                    echo "Application DLL not found."
+                                    exit 1
+                                fi
                             EOF
                         '''
                     }
