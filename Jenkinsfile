@@ -36,7 +36,7 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << EOF
                                 cd ${DEPLOY_DIR}
                                 if [ -f ${APP_NAME}.dll ]; then
-                                    dotnet ${APP_NAME}.dll --urls http://0.0.0.1:${APP_PORT}
+                                    dotnet ${APP_NAME}.dll --urls http://0.0.0.0:${APP_PORT}
                                 else
                                     echo "Application DLL not found."
                                     exit 1
