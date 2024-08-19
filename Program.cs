@@ -3,6 +3,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5000); // Bind to port 5000 on all network interfaces
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
