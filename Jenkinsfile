@@ -27,15 +27,17 @@ pipeline {
                 sshagent(credentials: [CREDENTIALS_ID]) {
                     script {
                         // Copy the published application to the EC2 instance
-                        sh """
-                            scp -o StrictHostKeyChecking=no -i $SSH_KEY -r bin/Release/net8.0/publish ubuntu@${EC2_IP}:${DEPLOY_DIR}
-                        """
+                        sh '''
+                            scp -o StrictHostKeyChecking=no -r bin/Release/net8.0/publish ubuntu@${EC2_IP}:${DEPLOY_DIR}
+                        '''
 
                         // SSH into the EC2 instance and run deployment commands
-                        sh """
-                            ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@${EC2_IP} \\
-                            'cd ${DEPLOY_DIR} && dotnet HelloWorldApp.dll --urls http://0.0.0.0:5000'
-                        """
+                        sh '''
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << 'EOF'
+                                cd ${DEPLOY_DIR}
+                                dotnet your-application.dll --urls http://0.0.0.0:5000
+                            EOF
+                        '''
                     }
                 }
             }
