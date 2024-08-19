@@ -7,7 +7,7 @@ pipeline {
         APP_NAME = 'HelloWorldApp'
         REPO_URL = 'https://github.com/Venkat-267/DotnetHelloApp.git'
         DEPLOY_DIR = '/home/ubuntu/deployment'
-        APP_PORT = '5000'
+        APP_PORT = '5001'
         CREDENTIALS_ID = 'ec2-ssh-credentials'
     }
 
@@ -36,7 +36,7 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << EOF
                                 cd ${DEPLOY_DIR}
                                 if [ -f ${APP_NAME}.dll ]; then
-                                    dotnet ${APP_NAME}.dll --urls http://0.0.0.0:${APP_PORT}
+                                    dotnet ${APP_NAME}.dll --urls http://0.0.0.1:${APP_PORT}
                                 else
                                     echo "Application DLL not found."
                                     exit 1
