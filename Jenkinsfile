@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define environment variables
         EC2_IP = '15.206.185.149'
-        APP_NAME = 'helloapp'
+        APP_NAME = 'HelloWorldApp'
         REPO_URL = 'https://github.com/Venkat-267/DotnetHelloApp.git'
         DEPLOY_DIR = '/home/ubuntu/deployment'
         APP_PORT = '5000'
@@ -35,7 +35,7 @@ pipeline {
                         sh '''
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << 'EOF'
                                 cd ${DEPLOY_DIR}
-                                dotnet HelloWorldApp.dll --urls http://0.0.0.0:5000
+                                dotnet ${APP_NAME}.dll --urls http://0.0.0.0:${APP_PORT}
                             EOF
                         '''
                     }
