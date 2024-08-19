@@ -55,10 +55,8 @@ pipeline {
                                 sudo systemctl daemon-reload
                                 sudo systemctl enable helloapp.service
                                 sudo systemctl start helloapp.service
-                                sudo ln -s /etc/nginx/sites-available/helloapp /etc/nginx/sites-enabled/
-                                sudo nginx -t
                                 sudo systemctl restart nginx
-                                EOF
+                            EOF
                         '''
                     }
                 }
