@@ -7,7 +7,7 @@ pipeline {
         APP_NAME = 'HelloWorldApp'
         REPO_URL = 'https://github.com/Venkat-267/DotnetHelloApp.git'
         DEPLOY_DIR = '/home/ubuntu/deployment'
-        APP_PORT = '5001'
+        APP_PORT = '5000'
         CREDENTIALS_ID = 'ec2-ssh-credentials'
     }
 
