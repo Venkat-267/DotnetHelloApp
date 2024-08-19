@@ -33,13 +33,12 @@ pipeline {
 
                         // SSH into the EC2 instance and run deployment commands
                         sh '''
-                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << EOF
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << 'EOF'
                                 cd ${DEPLOY_DIR}
-                                sudo tee /etc/systemd/system/helloapp.service > /dev/null <<EOL
-                                [Unit]
+                                echo "[Unit]
                                 Description=Your .NET Core Application
                                 After=network.target
-                                
+
                                 [Service]
                                 ExecStart=/usr/bin/dotnet ${DEPLOY_DIR}/bin/Release/net8.0/publish/HelloWorldApp.dll --urls http://0.0.0.0:5000
                                 WorkingDirectory=${DEPLOY_DIR}/bin/Release/net8.0/publish
@@ -49,10 +48,15 @@ pipeline {
                                 User=ubuntu
                                 Group=ubuntu
                                 Environment=ASPNETCORE_ENVIRONMENT=Production
-                                
+
                                 [Install]
-                                WantedBy=multi-user.target
-                                EOL
+                                WantedBy=multi-user.target" | sudo tee /etc/systemd/system/helloapp.service > /dev/null
+                                # Reload systemd and start the service
+                                sudo systemctl daemon-reload
+                                sudo systemctl enable helloapp.service
+                                sudo systemctl start helloapp.service
+                                sudo ln -s /etc/nginx/sites-available/helloapp /etc/nginx/sites-enabled/
+                                sudo nginx -t
                                 sudo systemctl restart nginx
                                 EOF
                         '''
