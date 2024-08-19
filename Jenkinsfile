@@ -54,7 +54,7 @@ pipeline {
                                 WantedBy=multi-user.target
                                 EOL
                                 sudo systemctl restart nginx
-                                EOL
+                                EOF
                         '''
                     }
                 }
