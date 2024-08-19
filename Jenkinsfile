@@ -35,7 +35,7 @@ pipeline {
                         sh '''
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << 'EOF'
                                 cd ${DEPLOY_DIR}
-                                dotnet your-application.dll --urls http://0.0.0.0:5000
+                                dotnet HelloWorldApp.dll --urls http://0.0.0.0:5000
                             EOF
                         '''
                     }
