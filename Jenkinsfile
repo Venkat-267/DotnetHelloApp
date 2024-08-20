@@ -35,8 +35,7 @@ pipeline {
                         sh '''
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "
                                 cd ${DEPLOY_DIR}
-                                sudo bash -c '
-                                echo \"[Unit]
+                                echo '[Unit]
                                 Description=${APP_NAME}
                                 After=network.target
 
@@ -51,12 +50,12 @@ pipeline {
                                 Environment=ASPNETCORE_ENVIRONMENT=Production
 
                                 [Install]
-                                WantedBy=multi-user.target\" > /etc/systemd/system/helloapp.service
+                                WantedBy=multi-user.target' | sudo tee /etc/systemd/system/helloapp.service
 
                                 sudo systemctl daemon-reload
                                 sudo systemctl restart helloapp
                                 sudo systemctl restart nginx
-                                "
+                            "
                         '''
                     }
                 }
