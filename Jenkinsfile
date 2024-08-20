@@ -35,6 +35,7 @@ pipeline {
                         sh '''
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "
                                 cd ${DEPLOY_DIR}
+                                git pull 
 
                                 sudo systemctl daemon-reload
                                 sudo systemctl restart helloapp
