@@ -33,9 +33,10 @@ pipeline {
 
                         // SSH into the EC2 instance and run deployment commands
                         sh '''
-                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << 'EOF'
+                            ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "
                                 cd ${DEPLOY_DIR}
-                                SERVICE_FILE_CONTENT="[Unit]
+                                sudo bash -c '
+                                echo \"[Unit]
                                 Description=${APP_NAME}
                                 After=network.target
 
@@ -50,15 +51,12 @@ pipeline {
                                 Environment=ASPNETCORE_ENVIRONMENT=Production
 
                                 [Install]
-                                WantedBy=multi-user.target"
+                                WantedBy=multi-user.target\" > /etc/systemd/system/helloapp.service
 
-                                echo "$SERVICE_FILE_CONTENT" | sudo tee /etc/systemd/system/helloapp.service > /dev/null
-                                
-                                # Reload systemd and start the service
                                 sudo systemctl daemon-reload
                                 sudo systemctl restart helloapp
                                 sudo systemctl restart nginx
-                            EOF
+                                "
                         '''
                     }
                 }
