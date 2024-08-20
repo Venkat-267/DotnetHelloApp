@@ -36,7 +36,7 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "
                                 cd ${DEPLOY_DIR}
                                 git pull 
-
+                                dotnet publish -c Release
                                 sudo systemctl daemon-reload
                                 sudo systemctl restart helloapp
                                 sudo systemctl restart nginx
