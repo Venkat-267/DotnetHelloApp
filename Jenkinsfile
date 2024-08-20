@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables
-        EC2_IP = '15.206.185.149'
+        EC2_IP = '15.207.113.227'
         APP_NAME = 'HelloWorldApp'
         REPO_URL = 'https://github.com/Venkat-267/DotnetHelloApp.git'
         DEPLOY_DIR = '/home/ubuntu/deployment'
@@ -53,8 +53,6 @@ pipeline {
                                 WantedBy=multi-user.target" | sudo tee /etc/systemd/system/helloapp.service > /dev/null
                                 # Reload systemd and start the service
                                 sudo systemctl daemon-reload
-                                sudo systemctl enable helloapp.service
-                                sudo systemctl start helloapp.service
                                 sudo systemctl restart nginx
                             EOF
                         '''
