@@ -54,7 +54,7 @@ pipeline {
                                 # Reload systemd and start the service
                                 sudo systemctl restart helloapp
                                 sudo systemctl restart nginx
-                            'EOF'
+                            EOF
                         '''
                     }
                 }
