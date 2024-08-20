@@ -35,22 +35,25 @@ pipeline {
                         sh '''
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} << 'EOF'
                                 cd ${DEPLOY_DIR}
-                                echo "[Unit]
-                                Description=Your .NET Core Application
+                                SERVICE_FILE_CONTENT="[Unit]
+                                Description=${APP_NAME}
                                 After=network.target
 
                                 [Service]
-                                ExecStart=/usr/bin/dotnet ${DEPLOY_DIR}/bin/Release/net8.0/publish/HelloWorldApp.dll --urls http://0.0.0.0:5000
+                                ExecStart=/usr/bin/dotnet ${DEPLOY_DIR}/bin/Release/net8.0/publish/HelloWorldApp.dll --urls http://0.0.0.0:${APP_PORT}
                                 WorkingDirectory=${DEPLOY_DIR}/bin/Release/net8.0/publish
                                 Restart=always
                                 RestartSec=10
-                                SyslogIdentifier=your-application
+                                SyslogIdentifier=${APP_NAME}
                                 User=ubuntu
                                 Group=ubuntu
                                 Environment=ASPNETCORE_ENVIRONMENT=Production
 
                                 [Install]
-                                WantedBy=multi-user.target" | sudo tee /etc/systemd/system/helloapp.service > /dev/null
+                                WantedBy=multi-user.target"
+
+                                echo "$SERVICE_FILE_CONTENT" | sudo tee /etc/systemd/system/helloapp.service > /dev/null
+                                
                                 # Reload systemd and start the service
                                 sudo systemctl daemon-reload
                                 sudo systemctl restart helloapp
