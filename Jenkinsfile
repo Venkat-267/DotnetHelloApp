@@ -52,7 +52,7 @@ pipeline {
                                 [Install]
                                 WantedBy=multi-user.target" | sudo tee /etc/systemd/system/helloapp.service > /dev/null
                                 # Reload systemd and start the service
-                                sudo systemctl daemon-reload
+                                sudo systemctl restart helloapp
                                 sudo systemctl restart nginx
                             'EOF'
                         '''
