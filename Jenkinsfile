@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables
-        EC2_IP = '15.207.113.227'
+        EC2_IP = '15.207.112.177'
         APP_NAME = 'HelloWorldApp'
         REPO_URL = 'https://github.com/Venkat-267/DotnetHelloApp.git'
         DEPLOY_DIR = '/home/ubuntu/deployment'
