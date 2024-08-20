@@ -35,22 +35,6 @@ pipeline {
                         sh '''
                             ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "
                                 cd ${DEPLOY_DIR}
-                                echo '[Unit]
-                                Description=${APP_NAME}
-                                After=network.target
-
-                                [Service]
-                                ExecStart=/usr/bin/dotnet ${DEPLOY_DIR}/bin/Release/net8.0/publish/HelloWorldApp.dll --urls http://0.0.0.0:${APP_PORT}
-                                WorkingDirectory=${DEPLOY_DIR}/bin/Release/net8.0/publish
-                                Restart=always
-                                RestartSec=10
-                                SyslogIdentifier=${APP_NAME}
-                                User=ubuntu
-                                Group=ubuntu
-                                Environment=ASPNETCORE_ENVIRONMENT=Production
-
-                                [Install]
-                                WantedBy=multi-user.target' | sudo tee /etc/systemd/system/helloapp.service
 
                                 sudo systemctl daemon-reload
                                 sudo systemctl restart helloapp
